@@ -53,14 +53,14 @@ Scan for candidate repos:
 For each candidate, detect: language, test framework, and rough test count.
 
 - ✅ Single repo → proceed silently (use it, no question)
-- ✅ Multiple repos → pass list to Mode Triage for unified menu
+- ✅ Multiple repos → pass list to Mode Triage (§2), which will show repo selection as **Step 2** after mode selection (Step 1). Repo selection is a separate question from mode — mode first, repo second.
 - ❌ No repos found → **HARD STOP**
 
 ```
 🔴 STOP — No repos found.
 
 prompt-to-pr needs a Git repository to work in. Either:
-  - Run /ptop from inside a Git repo
+  - Run /ptopr from inside a Git repo
   - Specify --repo <path>
   - Clone a repo first: git clone <url>
 ```
