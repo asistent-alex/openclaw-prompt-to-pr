@@ -7,20 +7,20 @@ description: >
   add tests, or write documentation. Supports 6 modes: New Feature, Bug Fix, Code Review,
   Refactor, Test Coverage, Document. Manages context actively to stay within 200k tokens.
   Use this skill whenever the user says "implement", "add feature", "fix bug", "review code",
-  "refactor", "add tests", "document", "prompt-to-pr", "/ptop", or starts any development task.
+  "refactor", "add tests", "document", "prompt-to-pr", "/ptopr", or starts any development task.
 tags: [workflow, development, feature, bugfix, review, refactor, testing, documentation, pr, git]
 always: false
 user-invocable: true
 invocation:
-  /ptop:              Start with mode selection menu
-  /ptop feature:      New Feature mode — prompt → plan → code → PR
-  /ptop fix:          Bug Fix mode — reproduce → root cause → fix → verify
-  /ptop review:       Code Review mode — structured analysis, read-only
-  /ptop refactor:     Refactor mode — clean code without changing behavior
-  /ptop test:         Test Coverage mode — gap analysis → write missing tests
-  /ptop docs:         Document mode — generate/update docs and comments
-  /ptop --repo PATH:  Specify which Git repo to work in
-  /ptop --repo ?:     Show repo selection menu (scan skills + workspace)
+  /ptopr:              Start with mode selection menu
+  /ptopr feature:      New Feature mode — prompt → plan → code → PR
+  /ptopr fix:          Bug Fix mode — reproduce → root cause → fix → verify
+  /ptopr review:       Code Review mode — structured analysis, read-only
+  /ptopr refactor:     Refactor mode — clean code without changing behavior
+  /ptopr test:         Test Coverage mode — gap analysis → write missing tests
+  /ptopr docs:         Document mode — generate/update docs and comments
+  /ptopr --repo PATH:  Specify which Git repo to work in
+  /ptopr --repo ?:     Show repo selection menu (scan skills + workspace)
 ---
 
 # prompt-to-pr — Full Development Workflow
@@ -32,19 +32,35 @@ to a ready-to-merge Pull Request, with explicit approval checkpoints and active 
 
 ---
 
+## ⛔ MANDATORY
+
+These rules are non-negotiable. Violating any of them is a bug in your execution, not a creative choice.
+
+1. **Context banner in EVERY assistant turn.** During the entire ptop workflow, EVERY response the assistant sends must begin with the context banner — not just at phase starts. Call `session_status`, get the real token count, and display:
+   ```
+   [FAZA N/M — PHASE NAME  MODE_EMOJI  MODE_NAME]  Context: ████░░░░░░░  Xk/200k (YY%)
+   ```
+   This applies to all turns: questions, plan presentations, code output, checkpoint prompts, test results, verify summaries. The user must always see budget status. **First line of every message, no exceptions.**
+
+2. **Real token counts only.** Never estimate. Never guess. Never use a cached value. Call `session_status` and use the `Tokens: Xk in` value from the result.
+
+3. **Checkpoints are hard stops.** After PLAN and after VERIFY, stop and wait for explicit user approval. No exceptions.
+
+---
+
 ## INVOCATION — How to start
 
 Type any of these commands to activate prompt-to-pr:
 
 | Command | Action |
 |---|---|
-| `/ptop` | Show mode selection menu |
-| `/ptop feature` | Start New Feature mode directly |
-| `/ptop fix` | Start Bug Fix mode directly |
-| `/ptop review` | Start Code Review mode directly |
-| `/ptop refactor` | Start Refactor mode directly |
-| `/ptop test` | Start Test Coverage mode directly |
-| `/ptop docs` | Start Document mode directly |
+| `/ptopr` | Show mode selection menu |
+| `/ptopr feature` | Start New Feature mode directly |
+| `/ptopr fix` | Start Bug Fix mode directly |
+| `/ptopr review` | Start Code Review mode directly |
+| `/ptopr refactor` | Start Refactor mode directly |
+| `/ptopr test` | Start Test Coverage mode directly |
+| `/ptopr docs` | Start Document mode directly |
 
 You can also trigger the skill by describing what you want:
 
@@ -115,7 +131,7 @@ When intent is detected AND repo is clear → skip the menu entirely, go straigh
 
 ### If unclear — show unified menu
 
-When `/ptop` is called without a clear mode (or mode+repo are both ambiguous),
+When `/ptopr` is called without a clear mode (or mode+repo are both ambiguous),
 show ONE combined menu — never two separate questions:
 
 **Single repo (auto-detected):**

@@ -83,7 +83,7 @@ against the total budget (default 200k, or custom if specified).
 
 ### Accumulation rule
 Context tokens only go UP. Never reset the counter.
-If you start a new /ptop cycle, context from the previous cycle is still there.
+If you start a new /ptopr cycle, context from the previous cycle is still there.
 Banner at cycle start should reflect accumulated total, not zero.
 
 ### Fallback (if session_status unavailable)
@@ -103,12 +103,12 @@ Example: a 10KB file ≈ 2,500 tokens
 
 ---
 
-## Budget Banner Format
+\n## Budget Banner Format
 
-Display at every phase transition:
+Display at the start of EVERY assistant turn during the ptop workflow — not just at phase transitions. The user must always see budget status. Every message starts with the banner, no exceptions:
 
 ```
-[FAZA 3/6 — IMPLEMENT 🚀 New Feature]  Context: ███████░░░  140k/200k (70%) 🟡
+[FAZA N/M — PHASE NAME  MODE_EMOJI  MODE_NAME]  Context: ████░░░░░░  Xk/200k (YY%) [emoji]
 ```
 
 Color indicators:
@@ -118,6 +118,7 @@ Color indicators:
 - 🔴 = red (90%+)
 
 ---
+
 
 ## Custom Budget
 
