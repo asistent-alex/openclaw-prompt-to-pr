@@ -101,7 +101,46 @@ Consider creating CLAUDE.md to persist conventions across sessions.
 
 ---
 
-## Check 5 — hardshell (soft)
+## Check 5 — Repo discovery (soft)
+
+If the user hasn't specified a repo (via `--repo` or in their prompt), scan for candidate repos:
+
+1. **Workspace git repos** — check if the current workspace has a `.git` directory
+2. **Installed skill repos** — scan `~/.openclaw/skills/` and `~/.npm-global/lib/node_modules/openclaw/skills/` for directories with `.git`
+3. **GitHub repos** — if `gh` CLI is available, list recent repos with `gh repo list --limit 10`
+
+If multiple repos are found, present a selection menu:
+```
+📂 Available repos for prompt-to-pr:
+
+  [1] ~/workspace/my-project          (Node.js, 12 tests)
+  [2] ~/.openclaw/skills/imm-romania  (Python, 8 tests)
+  [3] ~/.openclaw/skills/prompt-to-pr  (Markdown, 3 tests)
+
+  Type a number, or paste a repo path manually.
+```
+
+If exactly one repo is found (and it's the workspace), proceed silently.
+If no repos found, HARD STOP (no place to work).
+
+After selection, `cd` to the chosen repo for all subsequent checks and commands.
+
+- ✅ Single repo → proceed silently
+- ✅ Multiple repos → show menu, wait for selection
+- ❌ No repos found → **HARD STOP**
+
+```
+🔴 STOP — No repos found.
+
+prompt-to-pr needs a Git repository to work in. Either:
+  - Run /ptop from inside a Git repo
+  - Specify --repo <path>
+  - Clone a repo first: git clone <url>
+```
+
+---
+
+## Check 6 — hardshell (soft)
 
 Check if `hardshell` skill is installed:
 ```bash
@@ -124,17 +163,18 @@ Install hardshell for enhanced security and architecture rules.
 Always display before continuing:
 
 ```
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   prompt-to-pr — PREFLIGHT
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  Repo             ✅  ~/.openclaw/skills/prompt-to-pr
   Git              ✅
   Test suite       ✅  (jest)
   Coverage tool    ✅  (nyc)
   CLAUDE.md        ⚠️  not found
   hardshell        ⚠️  not installed
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   Status: READY
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
 Or if hard stop:

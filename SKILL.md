@@ -1,6 +1,6 @@
 ---
 name: prompt-to-pr
-version: 1.4.0
+version: 1.5.0
 description: >
   Full AI-assisted development workflow — from a single prompt to a ready-to-merge PR.
   Activate when the user wants to build a feature, fix a bug, review code, refactor,
@@ -19,6 +19,8 @@ invocation:
   /ptop refactor:     Refactor mode — clean code without changing behavior
   /ptop test:         Test Coverage mode — gap analysis → write missing tests
   /ptop docs:         Document mode — generate/update docs and comments
+  /ptop --repo PATH:  Specify which Git repo to work in
+  /ptop --repo ?:     Show repo selection menu (scan skills + workspace)
 ---
 
 # prompt-to-pr — Full Development Workflow
@@ -58,6 +60,13 @@ You can also trigger the skill by describing what you want:
 ## 0. PREFLIGHT — Run first, always
 
 Load `references/shared/preflight.md` and execute all checks before anything else.
+
+### Repo selection (new in v1.5)
+
+If the user specifies a repo (via `--repo <path>` or by describing which project), set that as the working directory.
+If no repo is specified, the preflight Check 5 will scan for candidate repos and present a selection menu.
+
+The selected repo becomes the **project root** — all subsequent commands (git, test, context scan) run from that directory.
 
 Hard stops (do not continue if these fail):
 - Git not initialized → STOP, explain what's missing
