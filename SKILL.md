@@ -142,12 +142,14 @@ If the user's message contains intent keywords, route directly — no menu neede
 
 When intent is detected AND repo is clear → skip the menu entirely, go straight to §3.
 
-### If unclear — show unified menu
+### If repo is unclear — ask directly
 
-When `/ptopr` is called without a clear mode (or mode+repo are both ambiguous),
-show ONE combined menu — never two separate questions and never a separate "pick repo first" follow-up:
+When `/ptopr` is called without a clear repo:
+- prefer `--repo <path>` if the user can provide it
+- otherwise use the current git repo if the command is already running inside one
+- otherwise ask directly for the repo path instead of scanning widely
 
-**Single repo (auto-detected):**
+**Current repo is clear:**
 ```
 🚀 prompt-to-pr — ce facem?
 
@@ -155,29 +157,23 @@ show ONE combined menu — never two separate questions and never a separate "pi
   [2] Bug Fix       [5] Tests
   [3] Review        [6] Docs
 
-  Repo: ~/.openclaw/skills/imm-romania (auto-detected)
+  Repo: current repo (auto-detected)
 
   Type a number or describe what you need.
 ```
 
-**Multiple repos:**
+**Repo is unclear:**
 ```
-🚀 prompt-to-pr — ce facem și unde?
+🚀 prompt-to-pr — am nevoie de repo.
 
-  [1] Feature      [4] Refactor
-  [2] Bug Fix       [5] Tests
-  [3] Review        [6] Docs
+Trimite un path Git repo sau pornește comanda cu:
+  /ptopr --repo /path/to/repo
 
-  Repos:
-    [a] ~/.openclaw/skills/imm-romania     (Python, pytest)
-    [b] ~/.openclaw/skills/prompt-to-pr   (Markdown)
-    [c] ~/.openclaw/workspace/openclaw-hardshell
-
-  Type e.g. "1a" or describe what you need.
+După asta continui direct cu modul potrivit.
 ```
 
-**Key rule:** Never ask two separate questions when one will do. Prefer zero questions
-when intent + repo are both clear from context.
+**Key rule:** Prefer a predictable startup over clever repo discovery.
+Use explicit repo selection or the current repo; ask directly when neither is available.
 
 ---
 
