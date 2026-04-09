@@ -36,33 +36,12 @@ Then restart prompt-to-pr.
 **This check MUST run before test suite and coverage checks,** because the selected
 repo determines which directory to scan for tests.
 
-### Auto-detect first, ask only when ambiguous
-
-1. If user specified `--repo <path>` or mentioned a project name → use that repo directly.
-2. If only one git repo is found → use it silently, **do not ask**.
-3. If multiple repos are found → **do NOT show a separate repo menu here.** Instead, pass
-   the repo list to the Mode Triage (§2) which will show a single unified menu
-   combining mode + repo selection. This avoids asking the user two separate questions.
-4. If discovery is partial because tooling is unavailable or restricted → surface the
-   discovered candidates, say discovery was partial, and ask the user to choose.
-
-Scan for candidate repos:
-
-1. **Workspace git repos** — check if the current workspace has a `.git` directory
-2. **Installed skill repos** — scan `~/.openclaw/skills/` and `~/.npm-global/lib/node_modules/openclaw/skills/` for directories with `.git`
-3. **GitHub repos** — if `gh` CLI is available, list recent repos with `gh repo list --limit 10`
-
-Fallback rules:
-- If `gh` is missing or not authenticated → skip GitHub discovery, continue with local repos only
-- If shell access is restricted → inspect likely repo roots with available file reads, then ask for confirmation if multiple candidates remain
-- If metadata like language/test framework cannot be detected → still list the repo, mark fields as `unknown`
-
-For each candidate, detect: language, test framework, and rough test count.
-
-- ✅ Single repo → proceed silently (use it, no question)
-- ✅ Multiple repos → pass list to Mode Triage (§2), which will show a **single combined menu** for mode + repo selection
-- ⚠️ Partial discovery with one or more candidates → ask the user to confirm from the discovered list
-- ❌ No repos found → **HARD STOP**
+Load `references/shared/repo-selection.md` and follow it as the canonical repo-selection policy.
+At minimum, preflight must:
+- discover local and optional GitHub repo candidates
+- prefer auto-selection when unambiguous
+- use a **single combined menu** when mode + repo are both needed
+- surface partial discovery honestly instead of pretending the list is complete
 
 ```
 🔴 STOP — No repos found.
@@ -77,6 +56,8 @@ prompt-to-pr needs a Git repository to work in. Either:
 
 ## Check 3 — Test suite (mode-aware)
 
+Load `references/shared/mode-policy.md` and use it as the canonical strictness matrix.
+
 Look for any of the following (in order of priority):
 
 | Signal | Detected as |
@@ -88,9 +69,10 @@ Look for any of the following (in order of priority):
 | `*.test.*`, `*.spec.*`, `tests/`, `__tests__/` directory | Test files present |
 | `cargo test` runnable | Rust |
 
-- ✅ Any detected → continue
-- ❌ None detected in 🚀/🐛/♻️/🧪 modes → **HARD STOP**
-- ❌ None detected in 🔍/📖 modes → **SOFT WARNING**, continue
+Then apply the mode policy:
+- 🚀/🐛/♻️/🧪 without tests → **HARD STOP**
+- 🔍/📖 without tests → **SOFT WARNING**, continue
+- 🧪 without coverage tooling → **HARD STOP** for coverage analysis
 
 Message to user for hard-stop modes:
 ```

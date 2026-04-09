@@ -10,6 +10,8 @@ ROOT = Path(__file__).resolve().parent.parent
 SKILL = ROOT / "SKILL.md"
 PREFLIGHT = ROOT / "references" / "shared" / "preflight.md"
 CONTEXT_SCAN = ROOT / "references" / "shared" / "context-scan.md"
+REPO_SELECTION = ROOT / "references" / "shared" / "repo-selection.md"
+MODE_POLICY = ROOT / "references" / "shared" / "mode-policy.md"
 
 
 def test_smoke():
@@ -30,35 +32,59 @@ def test_references_directory_exists():
     assert (refs / "modes").is_dir(), "references/modes/ not found"
 
 
+def test_shared_policy_files_exist():
+    """Verify shared policy files exist for deduplicated rules."""
+    assert REPO_SELECTION.is_file(), f"Missing {REPO_SELECTION}"
+    assert MODE_POLICY.is_file(), f"Missing {MODE_POLICY}"
+
+
 def test_preflight_has_repo_discovery_section():
     """Verify preflight.md contains the repo discovery section."""
     content = PREFLIGHT.read_text()
     assert "## Check 2 — Repo discovery" in content
-    assert "single unified menu" in content
+    assert "references/shared/repo-selection.md" in content
+
+
+def test_repo_selection_policy_requires_single_combined_menu():
+    """Verify the canonical repo-selection policy rejects two-step selection."""
+    content = REPO_SELECTION.read_text()
+    assert "single combined menu" in content
+    assert "Never" in content
+    assert "mode first, repo second" not in content
 
 
 def test_preflight_repo_selection_is_combined_not_two_step():
-    """Verify preflight does not instruct a separate mode-first-then-repo question flow."""
+    """Verify preflight points to the canonical combined-selection policy."""
     content = PREFLIGHT.read_text()
     assert "single combined menu" in content
     assert "mode first, repo second" not in content
     assert "repo selection as **Step 2** after mode selection (Step 1)" not in content
 
 
+def test_mode_policy_matrix_covers_all_modes():
+    """Verify the canonical mode matrix covers every supported mode."""
+    content = MODE_POLICY.read_text()
+    for label in ["🚀 Feature", "🐛 Bug Fix", "♻️ Refactor", "🧪 Test Coverage", "🔍 Review", "📖 Document"]:
+        assert label in content
+
+
+
 def test_preflight_test_suite_check_is_mode_aware():
     """Verify test-suite handling differs by mode."""
     content = PREFLIGHT.read_text()
     assert "## Check 3 — Test suite (mode-aware)" in content
-    assert "🚀/🐛/♻️/🧪 modes" in content
-    assert "🔍/📖 modes" in content
+    assert "references/shared/mode-policy.md" in content
+    assert "🚀/🐛/♻️/🧪 without tests" in content
+    assert "🔍/📖 without tests" in content
     assert "SOFT WARNING" in content
 
 
-def test_skill_hard_stops_are_mode_aware():
-    """Verify SKILL.md documents mode-aware test-suite hard stops."""
+def test_skill_references_canonical_policy_files():
+    """Verify SKILL.md points to the shared repo-selection and mode-policy docs."""
     content = SKILL.read_text()
-    assert "Test suite missing in **Feature / Fix / Refactor / Test Coverage** modes → STOP" in content
-    assert "Test suite missing in **Review / Docs** modes → warn, continue" in content
+    assert "references/shared/repo-selection.md" in content
+    assert "references/shared/mode-policy.md" in content
+    assert "Git not initialized → STOP" in content
 
 
 def test_skill_invocation_uses_ptopr_and_repo_option():
@@ -95,13 +121,13 @@ def test_repo_discovery_finds_git_repos_if_skill_dirs_present():
         assert repos_found, "No git repos found in discovered skills directories"
 
 
-def test_preflight_has_fallback_rules():
-    """Verify fallback behavior is documented for limited tooling."""
-    content = PREFLIGHT.read_text()
-    assert "Fallback rules:" in content
+def test_repo_selection_policy_has_fallback_rules():
+    """Verify fallback behavior is documented in the canonical repo-selection policy."""
+    content = REPO_SELECTION.read_text()
+    assert "Fallback rules" in content
     assert "If `gh` is missing or not authenticated" in content
     assert "If shell access is restricted" in content
-    assert "mark fields as `unknown`" in content
+    assert "mark unknown fields as `unknown`" in content
 
 
 def test_review_mode_mentions_missing_tests_are_warning_only():
