@@ -141,3 +141,18 @@ def test_document_mode_mentions_missing_tests_are_warning_only_until_behavior_ch
     document = (ROOT / "references" / "modes" / "document.md").read_text()
     assert "missing tests are a warning in this mode, not a blocker" in document
     assert "behavior-changing edits" in document
+
+
+def test_all_modes_note_phase_numbers_are_local_except_shared_steps():
+    """Verify every mode file explains that its phase numbers are local to the mode."""
+    for path in (ROOT / "references" / "modes").glob("*.md"):
+        content = path.read_text()
+        assert "Phase numbering note:" in content, f"Missing phase numbering note in {path.name}"
+
+
+
+def test_pr_modes_use_consistent_checkpoint_2_wording():
+    """Verify PR-producing modes use the same checkpoint-2 wording."""
+    for name in ["feature.md", "bugfix.md", "refactor.md", "test-coverage.md", "document.md"]:
+        content = (ROOT / "references" / "modes" / name).read_text()
+        assert "⛔ CHECKPOINT 2 — Approve to create PR?" in content, f"Inconsistent checkpoint wording in {name}"
