@@ -40,9 +40,9 @@ repo determines which directory to scan for tests.
 
 1. If user specified `--repo <path>` or mentioned a project name → use that repo directly.
 2. If only one git repo is found → use it silently, **do not ask**.
-3. If multiple repos are found → **do NOT show a separate repo menu here.** Instead, pass
-   the repo list to the Mode Triage (§2) which will show a single unified menu
-   combining mode + repo selection. This avoids asking the user two separate questions.
+3. If multiple repos are found → collect the list and pass it to Mode Triage (§2),
+   which will show repo selection as **Step 2** after mode selection (Step 1).
+   Repo selection is a separate question from mode — mode first, repo second.
 
 Scan for candidate repos:
 

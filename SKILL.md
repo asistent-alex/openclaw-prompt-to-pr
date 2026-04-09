@@ -129,12 +129,15 @@ If the user's message contains intent keywords, route directly — no menu neede
 
 When intent is detected AND repo is clear → skip the menu entirely, go straight to §3.
 
-### If unclear — show unified menu
+### If unclear — show two-step menu
 
-When `/ptop` is called without a clear mode (or mode+repo are both ambiguous),
-show ONE combined menu — never two separate questions:
+When `/ptop` is called without a clear mode, show menus in natural order:
+**mode first, repo second.** Never combine them into one menu.
 
-**Single repo (auto-detected):**
+#### Step 1 — What do you want to do?
+
+Always show the mode menu when intent is unclear:
+
 ```
 🚀 prompt-to-pr — ce facem?
 
@@ -142,29 +145,27 @@ show ONE combined menu — never two separate questions:
   [2] Bug Fix       [5] Tests
   [3] Review        [6] Docs
 
-  Repo: ~/.openclaw/skills/imm-romania (auto-detected)
-
   Type a number or describe what you need.
 ```
 
-**Multiple repos:**
+#### Step 2 — Where? (only if multiple repos)
+
+If only one repo is found → auto-detect silently, skip this step.
+If multiple repos are found → show repo selection:
+
 ```
-🚀 prompt-to-pr — ce facem și unde?
+📂 Unde?
 
-  [1] Feature      [4] Refactor
-  [2] Bug Fix       [5] Tests
-  [3] Review        [6] Docs
+  [a] ~/.openclaw/skills/imm-romania     (Python, pytest)
+  [b] ~/.openclaw/skills/prompt-to-pr   (Markdown)
 
-  Repos:
-    [a] ~/.openclaw/skills/imm-romania     (Python, pytest)
-    [b] ~/.openclaw/skills/prompt-to-pr   (Markdown)
-    [c] ~/.openclaw/workspace/openclaw-hardshell
-
-  Type e.g. "1a" or describe what you need.
+  Type a letter.
 ```
 
-**Key rule:** Never ask two separate questions when one will do. Prefer zero questions
-when intent + repo are both clear from context.
+**Key rules:**
+- Mode always comes before repo — it's what you want to do, then where.
+- Single repo = no repo question at all.
+- Prefer zero questions when intent + repo are both clear from context.
 
 ---
 

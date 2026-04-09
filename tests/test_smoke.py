@@ -41,6 +41,15 @@ def test_skill_invocation_has_repo():
     assert "--repo" in content, "--repo option not found in SKILL.md invocation"
 
 
+def test_skill_has_two_step_menu():
+    """Verify SKILL.md uses two-step menu: mode first, repo second."""
+    skill = Path(__file__).resolve().parent.parent / "SKILL.md"
+    content = skill.read_text()
+    assert "Step 1" in content, "Step 1 (mode selection) not found in SKILL.md"
+    assert "Step 2" in content, "Step 2 (repo selection) not found in SKILL.md"
+    assert "1a" not in content, "Combined '1a' format still present — should be two-step"
+
+
 def test_context_scan_uses_project_root():
     """Verify context-scan.md references PROJECT_ROOT."""
     context_scan = Path(__file__).resolve().parent.parent / "references" / "shared" / "context-scan.md"
