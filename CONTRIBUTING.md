@@ -47,4 +47,4 @@ Types: `feat`, `fix`, `docs`, `refactor`, `test`, `chore`
 
 ## Questions?
 
-Open an issue on [GitHub](https://github.com/assistentalex/openclaw-prompt-to-pr/issues).
+Open an issue on [GitHub](https://github.com/asistent-alex/openclaw-prompt-to-pr/issues).

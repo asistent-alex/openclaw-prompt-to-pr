@@ -35,7 +35,7 @@ clawhub install prompt-to-pr
 
 1. Download or clone this repository into your OpenClaw skills directory:
    ```bash
-   git clone https://github.com/assistentalex/openclaw-prompt-to-pr.git \
+   git clone https://github.com/asistent-alex/openclaw-prompt-to-pr.git \
      ~/.openclaw/skills/prompt-to-pr
    ```
 
