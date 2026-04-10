@@ -81,7 +81,7 @@ Load `references/shared/preflight.md` and execute all checks before anything els
 
 ### Repo selection
 
-Load `references/shared/repo-selection.md` and `references/shared/repo-registry.md` and follow them as the canonical repo-selection policy.
+Load `references/shared/repo-selection.md`, `references/shared/repo-registry.md`, and `references/shared/no-repo-onboarding.md` and follow them as the canonical repo-selection policy.
 The selected repo becomes the **project root** — all subsequent commands run from that directory.
 
 ### Mode policy
@@ -148,6 +148,7 @@ When `/ptopr` is called without a clear repo:
 - prefer `--repo <path>` if the user can provide it
 - otherwise use the current git repo if the command is already running inside one
 - otherwise ask directly for the repo path instead of scanning widely
+- if the user has no repo yet, use `references/shared/no-repo-onboarding.md` and recommend creating one, then recording it in `REPOS.md`
 
 **Current repo is clear:**
 ```
@@ -169,6 +170,7 @@ When `/ptopr` is called without a clear repo:
 Trimite un path Git repo sau pornește comanda cu:
   /ptopr --repo /path/to/repo
 
+Dacă nu ai încă repo, îl creezi mai întâi și îl notezi în `REPOS.md`.
 După asta continui direct cu modul potrivit.
 ```
 

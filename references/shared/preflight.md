@@ -36,13 +36,14 @@ Then restart prompt-to-pr.
 **This check MUST run before test suite and coverage checks,** because the selected
 repo determines which directory to scan for tests.
 
-Load `references/shared/repo-selection.md` and `references/shared/repo-registry.md` and follow them as the canonical repo-selection policy.
+Load `references/shared/repo-selection.md`, `references/shared/repo-registry.md`, and `references/shared/no-repo-onboarding.md` and follow them as the canonical repo-selection policy.
 At minimum, preflight must:
 - accept `--repo <path>` immediately when provided
 - prefer the current git repo when the command is already running inside one
 - otherwise, use the repo registry (aliases, recents, bounded discovery) to suggest a repo
 - ask the user directly for a repo path when the registry does not yield a clear repo
 - avoid broad startup discovery across installed skills, bundled skills, or GitHub
+- if the user has no repo yet, recommend creating one and recording it in `REPOS.md`
 
 ```
 🔴 STOP — Repo not selected.
@@ -51,6 +52,7 @@ prompt-to-pr needs a Git repository to work in. Either:
   - Run /ptopr from inside a Git repo
   - Specify --repo <path>
   - Clone a repo first: git clone <url>
+  - Or create a new repo, then record it in REPOS.md
 ```
 
 ---

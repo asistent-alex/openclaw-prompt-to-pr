@@ -43,6 +43,12 @@ clawhub install prompt-to-pr
 
 ## Usage
 
+### Recommended local prerequisite
+
+Keep a human-readable repo inventory in `REPOS.md`.
+This complements the machine-readable prompt-to-pr repo registry and helps both the user and the agent disambiguate repo names, paths, aliases, and nested subprojects.
+
+
 ### Start with `/ptopr`
 
 Use `/ptopr` in the current repo if it is already clear, or provide a repo explicitly with `--repo`.
@@ -73,6 +79,7 @@ You can also describe what you want to do:
 
 If the repo is unclear, the skill shows a repo selection menu (using known repos from the registry and bounded local discovery) instead of scanning broadly.
 If the intent is unclear but the repo is already clear, it shows the mode menu.
+If you do not have a repo yet, create one first, record it in `REPOS.md`, then run `/ptopr` again.
 
 ### Workflow Overview
 
@@ -107,6 +114,23 @@ Nothing is committed or pushed without your explicit "yes".
 ```bash
 python3 -m pytest tests/ -v
 ```
+
+### No repo yet?
+
+prompt-to-pr still requires Git. Recommended bootstrap for a brand-new project:
+
+```bash
+mkdir <project-name>
+cd <project-name>
+git init
+printf "# <project-name>\n" > README.md
+git add .
+git commit -m "chore: initial commit"
+```
+
+After creation, record it in:
+- `REPOS.md` — human-readable inventory
+- prompt-to-pr repo registry — optional machine-readable helper
 
 ### Project structure
 

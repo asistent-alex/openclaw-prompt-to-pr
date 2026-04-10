@@ -75,7 +75,20 @@ The repo path from the last successful prompt-to-pr run.
 
 If the registry file is missing or corrupted:
 - Prompt-to-pr falls back to explicit `--repo`, current repo detection, or asking for a path.
+- Recommend maintaining `REPOS.md` as the human-readable repo inventory.
 - Never block the workflow on a missing registry.
+
+---
+
+## Human-readable companion
+
+Pair the machine-readable registry with `REPOS.md`.
+
+Recommended split:
+- `REPOS.md` → names, paths, purpose, aliases, active/archive notes, nested subprojects
+- repo registry JSON → roots, aliases, recents, lastActiveRepo
+
+This keeps repo selection ergonomic for both the user and the agent.
 
 ---
 

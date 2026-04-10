@@ -12,6 +12,7 @@ PREFLIGHT = ROOT / "references" / "shared" / "preflight.md"
 CONTEXT_SCAN = ROOT / "references" / "shared" / "context-scan.md"
 REPO_SELECTION = ROOT / "references" / "shared" / "repo-selection.md"
 REPO_REGISTRY = ROOT / "references" / "shared" / "repo-registry.md"
+NO_REPO_ONBOARDING = ROOT / "references" / "shared" / "no-repo-onboarding.md"
 MODE_POLICY = ROOT / "references" / "shared" / "mode-policy.md"
 STATE_SYSTEM = ROOT / "references" / "shared" / "state-system.md"
 CLARIFY = ROOT / "references" / "shared" / "clarify.md"
@@ -47,6 +48,7 @@ def test_shared_policy_files_exist():
     """Verify shared policy files exist for deduplicated rules."""
     assert REPO_SELECTION.is_file(), f"Missing {REPO_SELECTION}"
     assert REPO_REGISTRY.is_file(), f"Missing {REPO_REGISTRY}"
+    assert NO_REPO_ONBOARDING.is_file(), f"Missing {NO_REPO_ONBOARDING}"
     assert MODE_POLICY.is_file(), f"Missing {MODE_POLICY}"
     assert STATE_SYSTEM.is_file(), f"Missing {STATE_SYSTEM}"
     assert CLARIFY.is_file(), f"Missing {CLARIFY}"
@@ -110,6 +112,7 @@ def test_skill_references_canonical_policy_files():
     """Verify SKILL.md points to the shared policy docs."""
     content = SKILL.read_text()
     assert "references/shared/repo-selection.md" in content
+    assert "references/shared/no-repo-onboarding.md" in content
     assert "references/shared/mode-policy.md" in content
     assert "references/shared/state-system.md" in content
     assert "references/shared/clarify.md" in content
@@ -138,6 +141,7 @@ def test_readme_is_aligned_with_ptopr_and_repo_selection_flow():
     content = README.read_text()
     assert "/ptopr" in content
     assert "/ptopr --repo /path/to/repo" in content
+    assert "REPOS.md" in content
     assert "PR Feedback" in content
     assert "shows a repo selection menu" in content
     assert "known repos from the registry" in content
@@ -193,6 +197,15 @@ def test_repo_registry_file_exists():
     assert "aliases" in content
     assert "recentRepos" in content
     assert "lastActiveRepo" in content
+    assert "REPOS.md" in content
+
+
+def test_no_repo_onboarding_doc_exists_and_recommends_creation():
+    """Verify no-repo onboarding is documented."""
+    content = NO_REPO_ONBOARDING.read_text()
+    assert "prompt-to-pr still requires a Git repo" in content
+    assert "create a new local repo" in content
+    assert "REPOS.md" in content
 
 
 def test_review_mode_mentions_missing_tests_are_warning_only():
