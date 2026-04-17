@@ -123,6 +123,8 @@ def test_skill_references_canonical_policy_files():
     assert "references/shared/repo-registry.md" in content
     assert "tasks/state.json" in content
     assert "Git not initialized → STOP" in content
+    assert "Preview discipline before PR" in content
+    assert "propose **1–2 concrete preview tests**" in content
 
 
 def test_skill_invocation_uses_ptopr_and_repo_option():
@@ -178,6 +180,10 @@ def test_context_budget_and_policy_avoid_claiming_exact_model_truth():
     assert "not an absolute model truth" in budget
     assert "not a perfect measurement" in policy
     assert "operational limit" in policy or "operational" in policy
+    assert "Context: Xk/200k" in budget
+    assert "Tokens: Yk in" in budget
+    assert "Do not present token counts as if they were equivalent" in policy
+    assert "Divergence handling" in policy
 
 
 def test_repo_selection_policy_has_local_fallback_rules():
@@ -318,6 +324,8 @@ def test_skill_references_context_policy_and_adaptive_monitoring():
     assert "next-step size" in content
     assert "Do not treat red as an automatic stop" in content
     assert "set `nextAction`, and stop" in content
+    assert "Context: 165k/200k · Tokens: 38k in" in content
+    assert "Do **not** present `Tokens: Xk in` as if it were the same thing as `Context: Yk/200k`" in content
 
 
 def test_pr_feedback_mode_exists_and_references_shared_docs():
@@ -345,6 +353,15 @@ def test_feature_bugfix_refactor_reference_release_readiness():
     for name in ["feature.md", "bugfix.md", "refactor.md"]:
         content = (ROOT / "references" / "modes" / name).read_text()
         assert "references/shared/release-readiness.md" in content, f"Missing release-readiness in {name}"
+
+
+def test_previewable_modes_propose_preview_tests_before_pr():
+    """Verify relevant modes nudge preview testing before PR/commit."""
+    for name in ["feature.md", "bugfix.md", "document.md", "refactor.md", "test-coverage.md"]:
+        content = (ROOT / "references" / "modes" / name).read_text()
+        assert "propose 1–2 concrete preview tests before PR/commit" in content, f"Missing preview-test rule in {name}"
+        assert "Test 1: happy path preview" in content, f"Missing preview-test example in {name}"
+        assert "Test 2: edge / empty / failure preview" in content, f"Missing preview-test example in {name}"
 
 
 def test_pr_modes_use_consistent_checkpoint_2_wording():
